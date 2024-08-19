@@ -1,5 +1,6 @@
 import { Model, DataTypes, Optional } from "sequelize";
 import sequelize from "../index";
+import Session from "../SessionModel/sessionModel";
 
 interface UserAttributes {
   id: number;
@@ -49,5 +50,7 @@ const User = sequelize.define<UserInstance>("users", {
     allowNull: false,
   },
 });
+
+User.hasMany(Session, { foreignKey: "userId", as: "UserId" });
 
 export default User;

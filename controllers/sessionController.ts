@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ExtendedRequest } from "../src/express";
-import { createSessions, getSessionsByUserId } from "../models/SessionModel/sessionQuery";
+import { createSessions, getAllUsersWithSessions, getSessionsByUserId } from "../models/SessionModel/sessionQuery";
 
 export async function postSession(req: ExtendedRequest, res: Response) {
   try {
@@ -15,7 +15,7 @@ export async function postSession(req: ExtendedRequest, res: Response) {
 
     return res.status(201).json(newSessions);
   } catch (error) {
-    return res.status(500).json({ error: "Failed to create sessions", details: error });
+    return res.status(500).json({ error: "Failed to create sessions" });
   }
 }
 
@@ -26,6 +26,18 @@ export async function getSessions(req: ExtendedRequest, res: Response) {
       const sessions = await getSessionsByUserId(userId);
       return res.status(200).json(sessions);
     } catch (error) {
-      return res.status(500).json({ error: "Failed to retrieve sessions", details: error });
+      return res.status(500).json({ error: "Failed to retrieve sessions" });
+    }
+  }
+
+  export async function getUsersWithSessions(req: ExtendedRequest, res: Response) {
+    try {
+      const id = (req.user as any).id;
+  
+      const usersWithSessions = await getAllUsersWithSessions(id);
+  
+      return res.status(200).json(usersWithSessions);
+    } catch (error) {
+      return res.status(500).json({ error: "Failed to retrieve users with sessions" });
     }
   }
